@@ -1,0 +1,13 @@
+site_name: "Eligibility Factor Verification Documentation"
+site_description: "Orientation and guidance for Eligibility Factor Verification (EFV), including when to use it, how eligibility factors are assessed, and where to go next."
+docs_dir: "docs"
+repo_url: "https://github.com/bcgov/efv-itk-docs"
+edit_uri: edit/main/docs/
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core
+
+markdown_extensions:
+  - md_in_html

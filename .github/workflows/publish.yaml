@@ -1,0 +1,63 @@
+name: Build and publish TechDocs
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_location:
+        description: "Publish to dev (DevHub Dev/Test) or prod (root and dev)"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+  push:
+    branches: [test, main]
+    paths:
+      - "catalog-info.yaml"
+      - "mkdocs.yml"
+      - "docs/**"
+      - ".github/workflows/publish.yaml"
+  pull_request:
+    branches: [test, main]
+    paths:
+      - "catalog-info.yaml"
+      - "mkdocs.yml"
+      - "docs/**"
+      - ".github/workflows/publish.yaml"
+
+jobs:
+  techdocs:
+    name: Validate or publish TechDocs
+    runs-on: ubuntu-latest
+    concurrency:
+      group: techdocs-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'publish' }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate pull request without publishing
+        if: github.event_name == 'pull_request'
+        uses: bcgov/devhub-techdocs-publish@stable
+        with:
+          publish: 'false'
+
+      - name: Build and publish TechDocs
+        if: github.event_name != 'pull_request'
+        uses: bcgov/devhub-techdocs-publish@stable
+        with:
+          publish: 'false'
+          # A manual destination takes precedence over the selected branch.
+          # production: ${{ ((github.event_name == 'workflow_dispatch' && inputs.deploy_location == 'prod') || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && 'true' || 'false' }}
+          # bucket_name: ${{ secrets.TECHDOCS_S3_BUCKET_NAME }}
+          # s3_access_key_id: ${{ secrets.TECHDOCS_AWS_ACCESS_KEY_ID }}
+          # s3_secret_access_key: ${{ secrets.TECHDOCS_AWS_SECRET_ACCESS_KEY }}
+          # s3_region: ${{ secrets.TECHDOCS_AWS_REGION }}
+          # s3_endpoint: ${{ secrets.TECHDOCS_AWS_ENDPOINT }}

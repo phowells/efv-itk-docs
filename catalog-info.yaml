@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: efv-itk-techdocs
+  title: Eligibility Factor Verification Documentation
+  description: Orientation and guidance for Eligibility Factor Verification (EFV), including when to use it, how eligibility factors are assessed, and where to go next.
+  annotations:
+    github.com/project-slug: bcgov/efv-itk-docs
+    backstage.io/techdocs-ref: dir:.
+    bcgovpubcode.gov.bc.ca/ministry: CITZ
+    bcgovpubcode.gov.bc.ca/product_description: Orientation and guidance for Eligibility Factor Verification (EFV), including when to use it, how eligibility factors are assessed, and where to go next.
+    bcgovpubcode.gov.bc.ca/product_owner: Shepherd, Kate
+    bcgovpubcode.gov.bc.ca/hosting_platform: Not-Applicable
+    backstage.io/source-template: template:default/docs-template
+  tags:
+    - connected-services
+    - eligibility-factor-verification
+    - integration-toolkit
+spec:
+  type: documentation
+  lifecycle: experimental
+  owner: group:default/databc-aps
